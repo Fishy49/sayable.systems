@@ -79,6 +79,4 @@ domain** (which commits a `CNAME` file) once DNS points at GitHub Pages.
 Sayable and this site are open-source under the **GPL-3.0** license. See [`LICENSE`](./LICENSE).
 
 Pictograms referenced by the app are by **ARASAAC** (Gobierno de Aragón, author Sergio Palao),
-licensed CC BY-NC-SA. Sayable was *inspired by* the open-source
-[]() project; no  code or assets were
-copied.
+licensed CC BY-NC-SA.

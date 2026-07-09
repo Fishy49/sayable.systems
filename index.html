@@ -181,11 +181,15 @@
             <div class="demo-toolbar">
               <span class="demo-crumb" id="demo-crumb">Home</span>
               <div class="demo-toggles">
-                <label class="mini-switch">
-                  <input type="checkbox" id="shapes-toggle" />
+                <label
+                  class="mini-switch"
+                  title="Shape coding: each word type gets a distinct outline shape, a non-color cue that helps colorblind and low-vision users."
+                >
+                  <input type="checkbox" id="shapes-toggle" aria-describedby="shapes-help" />
                   <span class="mini-switch-track" aria-hidden="true"></span>
                   <span class="mini-switch-label">Shape coding</span>
                 </label>
+                <span class="mini-switch-help" id="shapes-help">Distinct shape per word type, a colorblind-friendly cue.</span>
               </div>
             </div>
 
@@ -610,7 +614,6 @@
           <div class="footer-col">
             <h3>Credits</h3>
             <a href="https://arasaac.org">ARASAAC symbols</a>
-            <a href="">Inspired by </a>
           </div>
         </nav>
       </div>
@@ -618,8 +621,7 @@
       <div class="wrap footer-fine">
         <p>
           Built with care and no tracking. Pictograms by ARASAAC (Gobierno de Aragón, author Sergio
-          Palao), CC BY-NC-SA. Sayable was inspired by the open-source  project; no 
-          code or assets were copied.
+          Palao), CC BY-NC-SA.
         </p>
         <p>© Sayable · Open-source under GPL-3.0</p>
       </div>

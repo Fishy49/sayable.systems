@@ -1,0 +1,14 @@
+# Editor / OS cruft
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+
+# Local scratch
+node_modules/
+*.log
+
+# Claude Code local settings
+.claude/

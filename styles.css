@@ -1,5 +1,5 @@
 /* =========================================================================
-   Sayable — marketing site styles
+   Sayable marketing site styles
    Zero dependencies, zero third-party requests. Light + dark. A11y-first.
    ========================================================================= */
 
@@ -21,7 +21,7 @@
   --accent-ink: #075985;
   --accent-wash: #e0f2fe;
 
-  /* Vocabulary palette (from the app) — the site's "joy" colors */
+  /* Vocabulary palette (from the app): the site's "joy" colors */
   --cat-people: #ffe08a; /* yellow  · circle   */
   --cat-action: #a7e3a7; /* green   · triangle */
   --cat-describe: #a9c8f5; /* blue  · diamond  */
@@ -48,7 +48,7 @@
   color-scheme: light;
 }
 
-/* Dark theme — via OS preference (unless user forced light) or explicit toggle */
+/* Dark theme, via OS preference (unless user forced light) or explicit toggle */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --ink: #e8eef7;
@@ -410,7 +410,7 @@ a:hover {
   color: var(--ink-2);
 }
 
-/* Hero art — a floating mini board */
+/* Hero art: a floating mini board */
 .hero-art {
   position: relative;
   display: flex;
@@ -822,7 +822,7 @@ a:hover {
 }
 
 /* =========================================================================
-   Why free — price comparison
+   Why free: price comparison
    ========================================================================= */
 .price-compare {
   display: grid;

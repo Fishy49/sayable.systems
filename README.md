@@ -1,6 +1,6 @@
 # sayable.systems
 
-The landing site for **[Sayable](https://github.com/Fishy49/sayable-systems)** — a free,
+The landing site for **[Sayable](https://github.com/Fishy49/sayable-systems)**: a free,
 open-source AAC (Augmentative and Alternative Communication) board for the web. Tap pictures,
 it speaks and builds sentences. No accounts, no subscription, works offline. **Free, forever.**
 
@@ -12,10 +12,10 @@ it speaks and builds sentences. No accounts, no subscription, works offline. **F
 A single, static, dependency-free marketing site:
 
 - **No build step.** Plain HTML, CSS, and vanilla JS.
-- **No third-party requests.** No fonts, CDNs, analytics, or trackers — matching Sayable's
+- **No third-party requests.** No fonts, CDNs, analytics, or trackers, matching Sayable's
   privacy-first ethos. The whole page loads from this repo and nothing else.
 - **A live demo.** The homepage embeds a real, tappable communication board that speaks aloud
-  using the browser's built-in `speechSynthesis` — so visitors experience the product instantly.
+  using the browser's built-in `speechSynthesis`, so visitors experience the product instantly.
 - **Accessible by default.** Semantic landmarks, keyboard support, visible focus, honoured
   `prefers-reduced-motion`, and light/dark themes.
 
@@ -25,7 +25,7 @@ A single, static, dependency-free marketing site:
 index.html      # the page (all content + metadata)
 styles.css      # design system + all sections (light/dark)
 app.js          # theme toggle + the live speaking demo board
-app/            # the REAL Sayable app — a committed production build (see below)
+app/            # the REAL Sayable app, a committed production build (see below)
 assets/
   favicon.svg          # brand mark
   apple-touch-icon.png # home-screen icon
@@ -52,7 +52,7 @@ cp -r dist/* ../sayable.systems/app/
 
 ## Run it locally
 
-It's just static files — open `index.html`, or serve the folder:
+It's just static files: open `index.html`, or serve the folder:
 
 ```sh
 python3 -m http.server 8080

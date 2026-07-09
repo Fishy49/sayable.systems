@@ -1,7 +1,7 @@
 /* =========================================================================
-   Sayable — site interactions
+   Sayable site interactions
    1) Theme toggle (persisted)
-   2) A real, speaking AAC demo board — the whole point of the page.
+   2) A real, speaking AAC demo board, the whole point of the page.
    No dependencies, no network calls.
    ========================================================================= */
 (function () {
@@ -19,7 +19,7 @@
     try {
       localStorage.setItem(key, val);
     } catch (e) {
-      /* private mode — ignore */
+      /* private mode, ignore */
     }
   }
   function read(key) {
@@ -63,7 +63,7 @@
     if (!text) return;
     if (!supportsSpeech) {
       if (!warnedNoSpeech) {
-        note("Heads up: this browser has no built-in speech. Everything else works — try Chrome, Edge, or Safari to hear it talk.");
+        note("Heads up: this browser has no built-in speech. Everything else works. Try Chrome, Edge, or Safari to hear it talk.");
         warnedNoSpeech = true;
       }
       return;

@@ -25,12 +25,29 @@ A single, static, dependency-free marketing site:
 index.html      # the page (all content + metadata)
 styles.css      # design system + all sections (light/dark)
 app.js          # theme toggle + the live speaking demo board
+app/            # the REAL Sayable app — a committed production build (see below)
 assets/
   favicon.svg          # brand mark
   apple-touch-icon.png # home-screen icon
   og.png               # social / Open Graph card (1200×630)
 robots.txt
 sitemap.xml
+```
+
+## The hosted app (`/app/`)
+
+`app/` is a production build of [Fishy49/sayable-systems](https://github.com/Fishy49/sayable-systems),
+committed here so GitHub Pages serves the full PWA at `https://sayable.systems/app/`. Visitors
+open it, add it to a home screen, and it runs offline from then on.
+
+To update it after changing the app:
+
+```sh
+cd ../sayable-systems
+SAYABLE_BASE=/app/ npm run build     # base-path-aware build (manifest, SW scope, fallback)
+rm -rf ../sayable.systems/app && mkdir ../sayable.systems/app
+cp -r dist/* ../sayable.systems/app/
+# then commit & push this repo
 ```
 
 ## Run it locally

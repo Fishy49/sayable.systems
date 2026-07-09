@@ -322,9 +322,6 @@ a:hover {
 .theme-toggle:hover {
   border-color: var(--accent);
 }
-.btn-github svg {
-  flex: 0 0 auto;
-}
 
 /* =========================================================================
    Hero
@@ -1006,6 +1003,48 @@ a:hover {
 }
 .step p {
   color: var(--ink-2);
+}
+.step-cta {
+  margin-top: 16px;
+}
+
+/* =========================================================================
+   Set it up (install)
+   ========================================================================= */
+.install-section {
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+}
+.device-list {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+.device-list li {
+  color: var(--ink-2);
+  font-size: 0.97rem;
+  line-height: 1.45;
+  padding: 10px 12px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+.device-list b {
+  color: var(--ink);
+}
+.install-note {
+  max-width: 640px;
+  margin: 26px auto 0;
+  text-align: center;
+  color: var(--ink-2);
+  background: var(--accent-wash);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  font-size: 0.97rem;
 }
 
 /* =========================================================================

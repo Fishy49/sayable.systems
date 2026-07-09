@@ -1338,6 +1338,24 @@ a:hover {
     text-align: left;
     max-width: none;
   }
+  /* Stack the sentence bar: the strip gets its own full-width row (so its
+     placeholder stops wrapping to three lines), and the action buttons sit
+     in a tidy row beneath instead of being squished beside it. */
+  .utterance {
+    flex-wrap: wrap;
+  }
+  .strip {
+    flex: 1 1 100%;
+  }
+  .bar-actions {
+    width: 100%;
+  }
+  .bar-btn {
+    min-height: 50px;
+  }
+  .bar-btn.speak {
+    flex: 1 1 auto;
+  }
 }
 
 /* =========================================================================

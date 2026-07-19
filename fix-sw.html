@@ -1,0 +1,17 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Sayable service worker repair</title>
+<body style="font:20px system-ui;padding:2em">
+Repairing…
+<script>
+(async () => {
+  let n = 0;
+  try {
+    const rs = await navigator.serviceWorker.getRegistrations();
+    n = rs.length;
+    for (const r of rs) await r.unregister();
+  } catch (e) { document.body.textContent = 'Error: ' + e; return; }
+  document.body.textContent = 'Unregistered ' + n + ' service worker(s). Loading Sayable…';
+  setTimeout(() => location.replace('/app/'), 1200);
+})();
+</script>

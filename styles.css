@@ -511,6 +511,11 @@ a:hover {
   color: #0f172a;
   box-shadow: var(--shadow-tile);
 }
+.mini-tile img {
+  width: clamp(1.5rem, 5.5vw, 2.2rem);
+  height: clamp(1.5rem, 5.5vw, 2.2rem);
+  object-fit: contain;
+}
 .mini-tile b {
   font-size: 0.72rem;
   font-weight: 800;
@@ -695,6 +700,12 @@ a:hover {
 .chip .chip-sym {
   font-size: 1.2rem;
 }
+.chip .chip-sym img {
+  display: block;
+  width: 1.4rem;
+  height: 1.4rem;
+  object-fit: contain;
+}
 .bar-actions {
   display: flex;
   gap: 8px;
@@ -784,6 +795,13 @@ a:hover {
 .tile-sym {
   font-size: clamp(1.7rem, 8vw, 2.6rem);
   line-height: 1;
+}
+/* ARASAAC picture symbols render as images; emoji still render as text. */
+.tile-sym img {
+  display: block;
+  width: clamp(2.1rem, 10vw, 3.4rem);
+  height: clamp(2.1rem, 10vw, 3.4rem);
+  object-fit: contain;
 }
 .tile-label {
   font-size: clamp(0.72rem, 2.6vw, 0.95rem);

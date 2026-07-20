@@ -97,11 +97,20 @@
     folder: "folder"
   };
 
+  // Starter tiles show ARASAAC pictograms (the same set the app ships), looked
+  // up by the tile's word. The emoji argument is left in place as a readable
+  // inline reference. Symbols live at assets/symbols/<slug>.webp.
+  function symPath(text) {
+    return "assets/symbols/" + text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + ".webp";
+  }
+  function isImg(s) {
+    return /\.(webp|png|svg|jpe?g|gif)$/i.test(s);
+  }
   function w(text, sym, cat) {
-    return { text: text, sym: sym, cat: cat };
+    return { text: text, sym: symPath(text), cat: cat };
   }
   function folder(text, sym, to) {
-    return { text: text, sym: sym, cat: "folder", goto: to };
+    return { text: text, sym: symPath(text), cat: "folder", goto: to };
   }
 
   var BOARDS = {
@@ -239,7 +248,16 @@
       var sym = document.createElement("span");
       sym.className = "tile-sym";
       sym.setAttribute("aria-hidden", "true");
-      sym.textContent = t.sym;
+      if (isImg(t.sym)) {
+        var im = document.createElement("img");
+        im.src = t.sym;
+        im.alt = "";
+        im.loading = "lazy";
+        im.draggable = false;
+        sym.appendChild(im);
+      } else {
+        sym.textContent = t.sym;
+      }
 
       var lab = document.createElement("span");
       lab.className = "tile-label";
@@ -294,7 +312,14 @@
       var s = document.createElement("span");
       s.className = "chip-sym";
       s.setAttribute("aria-hidden", "true");
-      s.textContent = word.sym;
+      if (isImg(word.sym)) {
+        var csi = document.createElement("img");
+        csi.src = word.sym;
+        csi.alt = "";
+        s.appendChild(csi);
+      } else {
+        s.textContent = word.sym;
+      }
       var txt = document.createElement("span");
       txt.textContent = word.text;
       chip.appendChild(s);

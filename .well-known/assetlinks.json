@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "systems.sayable.twa",
+      "sha256_cert_fingerprints": [
+        "D4:BC:37:C6:55:3B:A2:2D:8C:F9:0B:6D:17:A0:DF:12:B4:54:24:45:FE:5B:CA:07:3F:EF:64:F2:89:39:4F:26"
+      ]
+    }
+  }
+]

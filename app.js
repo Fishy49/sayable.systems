@@ -59,6 +59,12 @@
     noteEl.hidden = false;
   }
 
+  // TTS engines read a lone capital letter by name ("capital I"). Speak such
+  // words as a homophone so a button sounds the same tapped alone as it does
+  // mid-sentence. Only whole-utterance exact matches are rewritten (same fix
+  // the app ships in speech.ts).
+  var SPOKEN_FIXES = { I: "eye" };
+
   function speak(text) {
     if (!text) return;
     if (!supportsSpeech) {
@@ -71,7 +77,8 @@
     var synth = window.speechSynthesis;
     try {
       synth.cancel();
-      var u = new SpeechSynthesisUtterance(text);
+      var phrase = SPOKEN_FIXES[text.trim()] || text;
+      var u = new SpeechSynthesisUtterance(phrase);
       u.rate = 0.95;
       u.pitch = 1;
       if (speakBtn) {

@@ -575,6 +575,7 @@ a:hover {
 }
 .demo-toolbar {
   display: flex;
+  flex-wrap: wrap; /* crumb, voice picker, and toggle degrade to rows */
   align-items: center;
   justify-content: space-between;
   gap: 12px;
@@ -649,6 +650,49 @@ a:hover {
   transform: translateX(17px);
 }
 .mini-switch input:focus-visible + .mini-switch-track {
+  outline: 3px solid var(--accent-2);
+  outline-offset: 2px;
+}
+
+/* Voice picker: lives on the always-dark toolbar, so like the mini switch
+   above it keeps the toolbar's own palette in both site themes. */
+.voice-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto; /* hug the toggles instead of floating mid-bar */
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  cursor: pointer;
+}
+.voice-picker[hidden] {
+  display: none; /* JS hides the whole control when speech is unsupported */
+}
+.voice-picker select {
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+  color: #e2e8f0;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: var(--radius-sm);
+  padding: 7px 30px 7px 12px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  color-scheme: dark; /* native dropdown list matches the dark toolbar */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  transition: background-color 0.15s ease;
+}
+.voice-picker select:hover {
+  background-color: rgba(255, 255, 255, 0.16);
+}
+.voice-picker select:focus-visible {
   outline: 3px solid var(--accent-2);
   outline-offset: 2px;
 }
@@ -1351,6 +1395,16 @@ a:hover {
   .demo-toggles {
     align-items: flex-start;
     width: 100%;
+  }
+  /* Voice picker gets its own full row so the crumb, picker, and toggle
+     stack instead of jostling. */
+  .voice-picker {
+    margin-left: 0;
+    width: 100%;
+  }
+  .voice-picker select {
+    flex: 1 1 auto;
+    max-width: none;
   }
   .mini-switch-help {
     text-align: left;

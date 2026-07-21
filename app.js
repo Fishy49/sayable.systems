@@ -81,6 +81,11 @@
       var u = new SpeechSynthesisUtterance(phrase);
       u.rate = 0.95;
       u.pitch = 1;
+      var voice = pickedVoice();
+      if (voice) {
+        u.voice = voice;
+        u.lang = voice.lang;
+      }
       if (speakBtn) {
         speakBtn.classList.add("speaking");
         u.onend = u.onerror = function () {
@@ -91,6 +96,83 @@
     } catch (e) {
       /* no-op */
     }
+  }
+
+  /* -------------------------------------------------------------- voices */
+  // Voice picker. Browsers hand out getVoices() lazily -- the list is often
+  // empty until the async `voiceschanged` event fires -- so the picker is
+  // built on both paths, and rebuilt if the engine changes its mind.
+  var voicePickerEl = document.getElementById("voice-picker");
+  var voiceSelect = document.getElementById("voice-select");
+  var VOICE_KEY = "sayable-demo-voice";
+  var chosenVoiceURI = read(VOICE_KEY) || "";
+  var voiceListSig = "";
+
+  function pickedVoice() {
+    if (!chosenVoiceURI || !supportsSpeech) return null;
+    var voices = window.speechSynthesis.getVoices();
+    for (var i = 0; i < voices.length; i++) {
+      if (voices[i].voiceURI === chosenVoiceURI) return voices[i];
+    }
+    return null; // saved voice vanished; browser default it is
+  }
+
+  function voiceOption(label, value) {
+    var o = document.createElement("option");
+    o.textContent = label;
+    o.value = value;
+    return o;
+  }
+
+  function populateVoices() {
+    if (!voiceSelect) return;
+    var all = window.speechSynthesis.getVoices();
+    if (!all.length) return; // not ready yet; voiceschanged calls us back
+
+    // Dedupe by voiceURI (Android Chrome repeats voices), English up front.
+    var seen = {};
+    var english = [];
+    var others = [];
+    for (var i = 0; i < all.length; i++) {
+      var v = all[i];
+      if (seen[v.voiceURI]) continue;
+      seen[v.voiceURI] = true;
+      if (/^en/i.test(v.lang)) english.push(v);
+      else others.push(v);
+    }
+    function byName(a, b) {
+      return a.name.localeCompare(b.name);
+    }
+    english.sort(byName);
+    others.sort(byName);
+
+    // Engines fire voiceschanged more than once; skip no-op rebuilds.
+    var sig = english
+      .concat(others)
+      .map(function (v) {
+        return v.voiceURI;
+      })
+      .join("\n");
+    if (sig === voiceListSig) return;
+    voiceListSig = sig;
+
+    voiceSelect.textContent = "";
+    voiceSelect.appendChild(voiceOption("Default voice", ""));
+    english.forEach(function (v) {
+      voiceSelect.appendChild(voiceOption(v.name, v.voiceURI));
+    });
+    if (others.length) {
+      var sep = voiceOption("──────────", "");
+      sep.disabled = true;
+      voiceSelect.appendChild(sep);
+      others.forEach(function (v) {
+        voiceSelect.appendChild(voiceOption(v.name + " (" + v.lang + ")", v.voiceURI));
+      });
+    }
+
+    // Restore the saved pick; if that voice is gone, default quietly.
+    voiceSelect.value = chosenVoiceURI;
+    if (voiceSelect.selectedIndex < 0) voiceSelect.value = "";
   }
 
   /* ------------------------------------------------------- board content */
@@ -376,13 +458,26 @@
       renderBoard();
     });
   }
+  if (voiceSelect) {
+    if (!supportsSpeech) {
+      // No engine, no voices: don't dangle a dead control.
+      if (voicePickerEl) voicePickerEl.hidden = true;
+    } else {
+      voiceSelect.addEventListener("change", function () {
+        chosenVoiceURI = voiceSelect.value;
+        store(VOICE_KEY, chosenVoiceURI);
+        // Only real user changes land here (restoring .value at load never
+        // fires `change`), so auditioning the pick is safe and fun.
+        speak("Hi! This is how I sound.");
+      });
+    }
+  }
 
-  // Some browsers populate voices asynchronously; nudge them to load early.
+  // Some browsers populate voices asynchronously; build the picker now if
+  // the list is ready, and again whenever the engine coughs it up.
   if (supportsSpeech && typeof window.speechSynthesis.getVoices === "function") {
-    window.speechSynthesis.getVoices();
-    window.speechSynthesis.onvoiceschanged = function () {
-      window.speechSynthesis.getVoices();
-    };
+    populateVoices();
+    window.speechSynthesis.onvoiceschanged = populateVoices;
   }
 
   renderBoard();

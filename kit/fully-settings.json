@@ -12,5 +12,6 @@
   "launchOnBoot": true,
   "disableStatusBar": true,
   "disableHomeButton": true,
-  "disableOtherApps": true
+  "disableOtherApps": true,
+  "disableVolumeButtons": false
 }

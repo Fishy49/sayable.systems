@@ -4,6 +4,7 @@
   "kioskPin": "1234",
   "advancedKioskProtection": true,
   "mdmLockTask": true,
+  "mdmLockTaskGlobalActions": true,
   "mdmDisableADB": false,
   "mdmDisableSafeModeBoot": true,
   "mdmDisableAppsFromUnknownSources": true,

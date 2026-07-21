@@ -669,6 +669,10 @@ a:hover {
 .voice-picker[hidden] {
   display: none; /* JS hides the whole control when speech is unsupported */
 }
+.voice-picker-icon {
+  font-size: 1.35rem;
+  line-height: 1; /* big glyph, same bar height */
+}
 .voice-picker select {
   appearance: none;
   -webkit-appearance: none;

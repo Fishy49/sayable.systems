@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /kit/
 
 Sitemap: https://sayable.systems/sitemap.xml

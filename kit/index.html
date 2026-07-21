@@ -116,36 +116,10 @@
       .warn-card strong {
         color: #b45309;
       }
-      .qr-panel {
-        display: grid;
-        gap: 1.6rem;
-        grid-template-columns: 1fr;
-        margin-top: 1.2rem;
-      }
-      @media (min-width: 760px) {
-        .qr-panel {
-          grid-template-columns: 1fr 1fr;
-          align-items: start;
-        }
-      }
-      .qr-form {
-        display: grid;
-        gap: 0.9rem;
-      }
-      .qr-form label {
-        display: grid;
-        gap: 0.3rem;
-        font-weight: 700;
-        font-size: 0.95rem;
-      }
-      .qr-form input,
-      .qr-form select {
-        font: inherit;
-        padding: 0.65rem 0.8rem;
-        border-radius: var(--radius-sm);
-        border: 1px solid var(--line-strong);
-        background: var(--panel);
-        color: var(--ink);
+      .qr-stage {
+        max-width: 620px;
+        margin: 1.4rem auto 0;
+        text-align: center;
       }
       .qr-box {
         background: #fff;
@@ -169,8 +143,14 @@
         line-height: 1.5;
       }
       .payload-details {
-        margin-top: 1rem;
+        margin-top: 1.2rem;
         font-size: 0.9rem;
+        text-align: left;
+      }
+      .payload-details summary {
+        cursor: pointer;
+        font-weight: 700;
+        text-align: center;
       }
       .payload-details pre {
         background: var(--panel-2);
@@ -416,48 +396,22 @@
             <p class="kicker">Step 3</p>
             <h2 id="qr-h">Make your QR code</h2>
             <p class="section-lead">
-              This code tells the tablet everything: install the kiosk app, lock to Sayable, apply our
-              tested settings. Add your Wi-Fi and the tablet even connects by itself.
+              One code, same for everyone — there’s nothing personal inside it. It tells the tablet:
+              install the kiosk app, lock to Sayable, apply our tested settings. You’ll pick your Wi-Fi on
+              the tablet during setup, just like any new device.
             </p>
           </div>
 
-          <div class="qr-panel">
-            <form class="qr-form" autocomplete="off" onsubmit="return false">
-              <label>
-                Wi-Fi network name (optional)
-                <input id="wifi-ssid" type="text" placeholder="e.g. OurHouse" />
-              </label>
-              <label>
-                Wi-Fi password
-                <input id="wifi-pass" type="text" placeholder="Leave blank for open networks" />
-              </label>
-              <label>
-                Wi-Fi security
-                <select id="wifi-sec">
-                  <option value="WPA" selected>WPA / WPA2 / WPA3 (most home networks)</option>
-                  <option value="WEP">WEP (very old routers)</option>
-                  <option value="NONE">Open network (no password)</option>
-                </select>
-              </label>
-              <p class="privacy-note">
-                🔒 Everything happens in your browser on this page. Your Wi-Fi details are drawn into the QR
-                code right here and are <strong>never sent anywhere</strong> — this page makes no network
-                requests with your data.
-              </p>
-              <details class="payload-details">
-                <summary>For the curious: what’s inside the code</summary>
-                <pre id="payload-json"></pre>
-              </details>
-            </form>
-
-            <div>
-              <div class="qr-box" id="qr-out" aria-live="polite"></div>
-              <p class="qr-note" id="qr-note"></p>
-              <p class="qr-note">
-                💡 Turn this screen’s brightness up when scanning. If you’re reading this on the tablet
-                you’re about to reset — open this page on a phone instead.
-              </p>
-            </div>
+          <div class="qr-stage">
+            <div class="qr-box" id="qr-out" aria-live="polite"></div>
+            <p class="qr-note">
+              💡 Turn this screen’s brightness up when scanning. If you’re reading this on the tablet
+              you’re about to reset — open this page on a phone instead.
+            </p>
+            <details class="payload-details">
+              <summary>For the curious: what’s inside the code</summary>
+              <pre id="payload-json"></pre>
+            </details>
           </div>
         </div>
       </section>
@@ -485,8 +439,8 @@
           <div class="step-card">
             <h3><span class="step-num">3</span>Scan your QR code from step 3</h3>
             <p>
-              Point the tablet’s camera at the code on your phone or computer screen. If you didn’t put
-              Wi-Fi in the code, the tablet asks you to pick a network first — that’s fine.
+              Point the tablet’s camera at the code on your phone or computer screen. Along the way the
+              tablet asks you to join your Wi-Fi — connect just like on any new device.
             </p>
           </div>
           <div class="step-card">

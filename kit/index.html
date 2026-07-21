@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <title>The Kiosk Kit: turn a cheap tablet into a dedicated talker · Sayable</title>
+    <meta
+      name="description"
+      content="Turn an affordable Samsung tablet into a locked, dedicated AAC talker running Sayable. No computer, no accounts, about 30 minutes. Free guide with a QR code that does the hard part."
+    />
+    <link rel="canonical" href="https://sayable.systems/kit/" />
+
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sayable" />
+    <meta property="og:title" content="The Sayable Kiosk Kit: a locked AAC talker from a $100 tablet" />
+    <meta
+      property="og:description"
+      content="A free guide + QR code that turns an affordable Samsung tablet into a dedicated, locked-down talker. No computer needed."
+    />
+    <meta property="og:url" content="https://sayable.systems/kit/" />
+    <meta property="og:image" content="https://sayable.systems/assets/og.png" />
+
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("sayable-theme");
+          if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      /* Kit-page extras, built on the site's design tokens. */
+      .kit-hero {
+        padding: 4.5rem 0 2.5rem;
+        text-align: center;
+      }
+      .kit-hero h1 {
+        font-size: clamp(2rem, 5vw, 3.1rem);
+        line-height: 1.12;
+        margin: 0.6rem 0 1rem;
+        letter-spacing: -0.02em;
+      }
+      .kit-hero .lead {
+        max-width: 46rem;
+        margin: 0 auto;
+        color: var(--ink-2);
+        font-size: 1.12rem;
+      }
+      .kit-facts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        justify-content: center;
+        margin-top: 1.4rem;
+        padding: 0;
+        list-style: none;
+      }
+      .kit-facts li {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 0.45rem 0.95rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        box-shadow: var(--shadow-sm);
+      }
+      .step-card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        padding: 1.6rem 1.8rem;
+        box-shadow: var(--shadow-sm);
+        margin-top: 1.2rem;
+      }
+      .step-card h3 {
+        margin: 0 0 0.4rem;
+        font-size: 1.15rem;
+      }
+      .step-card ol,
+      .step-card ul {
+        margin: 0.6rem 0 0;
+        padding-left: 1.3rem;
+      }
+      .step-card li {
+        margin: 0.45rem 0;
+        line-height: 1.55;
+      }
+      .step-num {
+        display: inline-grid;
+        place-items: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 999px;
+        background: var(--accent-wash);
+        color: var(--accent-ink);
+        font-weight: 800;
+        margin-right: 0.55rem;
+      }
+      .warn-card {
+        border: 2px solid #f59e0b;
+        background: color-mix(in srgb, #f59e0b 9%, var(--panel));
+        border-radius: var(--radius);
+        padding: 1rem 1.2rem;
+        margin-top: 1rem;
+        line-height: 1.55;
+      }
+      .warn-card strong {
+        color: #b45309;
+      }
+      .qr-panel {
+        display: grid;
+        gap: 1.6rem;
+        grid-template-columns: 1fr;
+        margin-top: 1.2rem;
+      }
+      @media (min-width: 760px) {
+        .qr-panel {
+          grid-template-columns: 1fr 1fr;
+          align-items: start;
+        }
+      }
+      .qr-form {
+        display: grid;
+        gap: 0.9rem;
+      }
+      .qr-form label {
+        display: grid;
+        gap: 0.3rem;
+        font-weight: 700;
+        font-size: 0.95rem;
+      }
+      .qr-form input,
+      .qr-form select {
+        font: inherit;
+        padding: 0.65rem 0.8rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--line-strong);
+        background: var(--panel);
+        color: var(--ink);
+      }
+      .qr-box {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 1rem;
+        box-shadow: var(--shadow);
+        max-width: 380px;
+        margin: 0 auto;
+      }
+      .qr-box svg {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .qr-note,
+      .privacy-note {
+        font-size: 0.92rem;
+        color: var(--ink-3);
+        margin-top: 0.7rem;
+        line-height: 1.5;
+      }
+      .payload-details {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+      }
+      .payload-details pre {
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        padding: 0.9rem;
+        overflow-x: auto;
+        font-size: 0.78rem;
+        line-height: 1.45;
+      }
+      .shop-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+        font-size: 0.97rem;
+      }
+      .shop-table th,
+      .shop-table td {
+        text-align: left;
+        padding: 0.6rem 0.7rem;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      .shop-table th {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--ink-3);
+      }
+      .tag-pick {
+        display: inline-block;
+        background: var(--accent-wash);
+        color: var(--accent-ink);
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 800;
+        padding: 0.15rem 0.6rem;
+        margin-left: 0.4rem;
+      }
+      .screen-say {
+        border-left: 4px solid var(--accent);
+        background: var(--panel-2);
+        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        padding: 0.6rem 0.9rem;
+        margin: 0.6rem 0;
+        font-style: italic;
+        color: var(--ink-2);
+      }
+      .kit-toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        justify-content: center;
+        margin-top: 1.6rem;
+      }
+      .kit-toc a {
+        text-decoration: none;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 0.45rem 1rem;
+        font-weight: 700;
+        font-size: 0.92rem;
+      }
+      .kit-toc a:hover {
+        border-color: var(--accent);
+        color: var(--accent-ink);
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" id="top">
+      <div class="wrap header-inner">
+        <a class="brand" href="../" aria-label="Sayable, home">
+          <svg class="brand-mark" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+            <rect width="512" height="512" rx="112" fill="#0f172a" />
+            <path
+              d="M128 144h256a40 40 0 0 1 40 40v144a40 40 0 0 1-40 40H236l-76 64v-64h-32a40 40 0 0 1-40-40V184a40 40 0 0 1 40-40z"
+              fill="#38bdf8"
+            />
+            <circle class="dot dot1" cx="208" cy="256" r="22" fill="#0f172a" />
+            <circle class="dot dot2" cx="288" cy="256" r="22" fill="#0f172a" />
+            <circle class="dot dot3" cx="368" cy="256" r="22" fill="#0f172a" />
+          </svg>
+          <span class="brand-word">Sayable</span>
+        </a>
+
+        <nav class="site-nav" aria-label="Primary">
+          <a href="#need">What you need</a>
+          <a href="#qr">Your QR code</a>
+          <a href="#setup">Setup</a>
+          <a href="#help">Help</a>
+        </nav>
+
+        <div class="header-actions">
+          <button
+            type="button"
+            class="theme-toggle"
+            id="theme-toggle"
+            aria-label="Switch to dark theme"
+            title="Toggle light / dark"
+          >
+            <span class="theme-toggle-icon" aria-hidden="true">☀️</span>
+          </button>
+          <a class="btn btn-primary" href="../app/">Open the app</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ===================== Hero ===================== -->
+      <section class="kit-hero">
+        <div class="wrap">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> The Kiosk Kit</p>
+          <h1>Turn an affordable tablet into a<br />dedicated talker</h1>
+          <p class="lead">
+            A dedicated communication device — one that only runs Sayable, can’t be escaped by curious
+            fingers, and speaks in a voice your child chooses — normally costs $500 to $6,000. This free
+            guide builds one from an off-the-shelf Samsung tablet. <strong>No computer. No accounts. No
+            technical skills.</strong> Our QR code does the hard part.
+          </p>
+          <ul class="kit-facts" aria-label="Quick facts">
+            <li>🕐 About 30 minutes</li>
+            <li>💶 Tablet + ~€9 software, one-time</li>
+            <li>🖥️ No computer needed</li>
+            <li>🔒 Real device-level lockdown</li>
+          </ul>
+          <div class="kit-toc" aria-label="Steps">
+            <a href="#need">1 · Get a tablet</a>
+            <a href="#prepare">2 · Reset it safely</a>
+            <a href="#qr">3 · Make your QR</a>
+            <a href="#setup">4 · Scan &amp; wait</a>
+            <a href="#finish">5 · Make it yours</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== What you need ===================== -->
+      <section class="section" id="need" aria-labelledby="need-h">
+        <div class="wrap">
+          <div class="section-head center">
+            <p class="kicker">Step 1</p>
+            <h2 id="need-h">Get a tablet</h2>
+            <p class="section-lead">
+              The kit currently supports Samsung’s Galaxy Tab line (that’s what we test on). Any of these
+              works — pick by budget and how long you want security updates.
+            </p>
+          </div>
+
+          <table class="shop-table">
+            <thead>
+              <tr>
+                <th>Tablet</th>
+                <th>Rough price</th>
+                <th>Updates until</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Galaxy Tab A11+ (11″)<span class="tag-pick">Longevity pick</span></td>
+                <td>$220–250 new</td>
+                <td>~2032</td>
+                <td>Samsung promises 7 years of security updates. Best if this device should last a childhood.</td>
+              </tr>
+              <tr>
+                <td>Galaxy Tab A9+ (11″)<span class="tag-pick">Budget pick</span></td>
+                <td>$90–150 refurbished, ~$200 new</td>
+                <td>Oct 2027</td>
+                <td>Great value; the tablet this kit was developed on. Honest caveat: updates end in 2027.</td>
+              </tr>
+              <tr>
+                <td>Galaxy Tab A9 / A11 (8.7″)</td>
+                <td>~$100–140</td>
+                <td>2027 / ~2032</td>
+                <td>Smaller and lighter — nice for small hands, fewer words per screen.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="qr-note">
+            Skip the Galaxy Tab A7 Lite — it no longer receives security updates. Wherever you buy,
+            Wi-Fi-only models are fine. A rugged kid-proof case with a handle or strap is the best $20 you’ll
+            spend on this project.
+          </p>
+
+          <div class="step-card">
+            <h3>You’ll also need</h3>
+            <ul>
+              <li>Your home Wi-Fi name and password.</li>
+              <li>A phone or computer to show this page’s QR code on (the tablet scans it from that screen).</li>
+              <li>About €9 (~$10) later for the kiosk software’s one-time license — paid on the tablet itself.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== Prepare ===================== -->
+      <section class="section" id="prepare" aria-labelledby="prepare-h">
+        <div class="wrap">
+          <div class="section-head center">
+            <p class="kicker">Step 2</p>
+            <h2 id="prepare-h">Reset the tablet safely</h2>
+            <p class="section-lead">
+              The setup magic only works on a tablet that’s factory-fresh.
+              <strong>Brand-new in the box? Skip straight to step 3.</strong>
+            </p>
+          </div>
+
+          <div class="warn-card">
+            <strong>⚠️ Do this in order — it matters.</strong> Android has an anti-theft feature (Factory
+            Reset Protection) that can lock a tablet after a reset if accounts are still on it. Removing the
+            accounts <em>first</em> keeps it disarmed. This is the only step in the whole guide where order
+            matters this much.
+          </div>
+
+          <div class="step-card">
+            <h3>On the tablet you’re reusing</h3>
+            <ol>
+              <li>
+                Open <strong>Settings → Accounts and backup → Manage accounts</strong> and remove the
+                <strong>Google account</strong> (if any).
+              </li>
+              <li>
+                Remove the <strong>Samsung account</strong> too (it asks for its password). If Find My
+                Mobile was on, this switches it off.
+              </li>
+              <li>
+                Now reset: <strong>Settings → General management → Reset → Factory data reset</strong>, and
+                confirm. The tablet restarts to a “Welcome” screen.
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== QR generator ===================== -->
+      <section class="section" id="qr" aria-labelledby="qr-h">
+        <div class="wrap">
+          <div class="section-head center">
+            <p class="kicker">Step 3</p>
+            <h2 id="qr-h">Make your QR code</h2>
+            <p class="section-lead">
+              This code tells the tablet everything: install the kiosk app, lock to Sayable, apply our
+              tested settings. Add your Wi-Fi and the tablet even connects by itself.
+            </p>
+          </div>
+
+          <div class="qr-panel">
+            <form class="qr-form" autocomplete="off" onsubmit="return false">
+              <label>
+                Wi-Fi network name (optional)
+                <input id="wifi-ssid" type="text" placeholder="e.g. OurHouse" />
+              </label>
+              <label>
+                Wi-Fi password
+                <input id="wifi-pass" type="text" placeholder="Leave blank for open networks" />
+              </label>
+              <label>
+                Wi-Fi security
+                <select id="wifi-sec">
+                  <option value="WPA" selected>WPA / WPA2 / WPA3 (most home networks)</option>
+                  <option value="WEP">WEP (very old routers)</option>
+                  <option value="NONE">Open network (no password)</option>
+                </select>
+              </label>
+              <p class="privacy-note">
+                🔒 Everything happens in your browser on this page. Your Wi-Fi details are drawn into the QR
+                code right here and are <strong>never sent anywhere</strong> — this page makes no network
+                requests with your data.
+              </p>
+              <details class="payload-details">
+                <summary>For the curious: what’s inside the code</summary>
+                <pre id="payload-json"></pre>
+              </details>
+            </form>
+
+            <div>
+              <div class="qr-box" id="qr-out" aria-live="polite"></div>
+              <p class="qr-note" id="qr-note"></p>
+              <p class="qr-note">
+                💡 Turn this screen’s brightness up when scanning. If you’re reading this on the tablet
+                you’re about to reset — open this page on a phone instead.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== Setup walkthrough ===================== -->
+      <section class="section" id="setup" aria-labelledby="setup-h">
+        <div class="wrap">
+          <div class="section-head center">
+            <p class="kicker">Step 4</p>
+            <h2 id="setup-h">Six taps, one scan, done</h2>
+            <p class="section-lead">Here’s exactly what you’ll see. The whole thing takes 5–10 minutes.</p>
+          </div>
+
+          <div class="step-card">
+            <h3><span class="step-num">1</span>Wake the fresh tablet to its “Welcome” screen</h3>
+            <p>The first screen usually asks for your language. Don’t tap “Start” or pick anything.</p>
+          </div>
+          <div class="step-card">
+            <h3><span class="step-num">2</span>Tap the same empty spot 6 times, quickly</h3>
+            <p>
+              Tap-tap-tap-tap-tap-tap on the welcome screen. A camera/QR scanner opens — this is Android’s
+              built-in setup-by-QR feature.
+            </p>
+          </div>
+          <div class="step-card">
+            <h3><span class="step-num">3</span>Scan your QR code from step 3</h3>
+            <p>
+              Point the tablet’s camera at the code on your phone or computer screen. If you didn’t put
+              Wi-Fi in the code, the tablet asks you to pick a network first — that’s fine.
+            </p>
+          </div>
+          <div class="step-card">
+            <h3><span class="step-num">4</span>Let it work</h3>
+            <p>You’ll see progress screens like:</p>
+            <p class="screen-say">“Getting ready for work setup…” · “Setting up your device…”</p>
+            <p>
+              Don’t worry about the office-speak — Android uses its business machinery for this. The tablet
+              downloads the kiosk app (Fully Kiosk Browser), makes it the device’s owner, applies our
+              settings, and restarts into <strong>Sayable, locked and ready</strong>. No Google sign-in ever
+              appears, and no account is created.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== Finish ===================== -->
+      <section class="section" id="finish" aria-labelledby="finish-h">
+        <div class="wrap">
+          <div class="section-head center">
+            <p class="kicker">Step 5</p>
+            <h2 id="finish-h">Make it yours</h2>
+            <p class="section-lead">
+              Three finishing touches, all on the tablet. To reach the kiosk’s settings at any time:
+              <strong>swipe in from the left edge, then enter the PIN — 1234 to start.</strong>
+            </p>
+          </div>
+
+          <div class="step-card">
+            <h3><span class="step-num">1</span>Change the exit PIN (please!)</h3>
+            <p>
+              Every kit tablet starts with PIN <strong>1234</strong>, and everyone who reads this page knows
+              it. Swipe in from the left edge → enter 1234 → <strong>Settings → Kiosk Mode → Kiosk Exit
+              PIN</strong> → set your own. Do this first.
+            </p>
+          </div>
+          <div class="step-card">
+            <h3><span class="step-num">2</span>Buy the kiosk license (~€9, one-time)</h3>
+            <p>
+              The kiosk software runs free with a watermark. To remove it: swipe in from the left edge →
+              PIN → <strong>Get a PLUS License</strong> in the menu → pay. It’s a lifetime license for this
+              tablet, transferable if the tablet is ever replaced, and needs no account.
+            </p>
+          </div>
+          <div class="step-card">
+            <h3><span class="step-num">3</span>Pick their voice, build their words</h3>
+            <p>
+              In Sayable, open the caregiver settings and try the voices — there are a dozen-plus English
+              ones (and 200 in other languages). Finding “their” voice is the whole point; take your time
+              together. Then add the words and pictures that matter in your child’s world.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== Living with it ===================== -->
+      <section class="section" id="care" aria-labelledby="care-h">
+        <div class="wrap">
+          <div class="section-head center">
+            <p class="kicker">Ongoing</p>
+            <h2 id="care-h">Living with it</h2>
+            <p class="section-lead">Almost nothing. That’s the point of a dedicated device.</p>
+          </div>
+
+          <div class="step-card">
+            <h3>Every day</h3>
+            <p>
+              It turns on into Sayable. It stays in Sayable. Speaking works without internet once it has
+              loaded. Charge it like anything else.
+            </p>
+          </div>
+          <div class="step-card">
+            <h3>A few times a year</h3>
+            <ul>
+              <li>
+                <strong>Android updates:</strong> exit the kiosk (swipe from left + PIN) →
+                Settings app → Software update. Samsung delivers these without any account.
+              </li>
+              <li>
+                <strong>Sayable updates:</strong> arrive automatically from the web — a small “reload”
+                banner appears in the app when one is ready.
+              </li>
+              <li>
+                <strong>After a big Android version update</strong>, check the tablet still boots into the
+                locked app. If anything looks off, see Help below.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== Troubleshooting ===================== -->
+      <section class="section faq-section" id="help" aria-labelledby="help-h">
+        <div class="wrap">
+          <div class="section-head center">
+            <p class="kicker">Help</p>
+            <h2 id="help-h">If something goes sideways</h2>
+          </div>
+
+          <div class="faq-list">
+            <details class="faq-item">
+              <summary>The tablet says “Can’t set up device” during setup</summary>
+              <p>
+                Android’s way of saying the download or install hiccupped (often shaky Wi-Fi). The tablet
+                will offer to reset — let it, and run the setup again from the 6 taps. Nothing is damaged;
+                this step is always safely repeatable.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>After a reset it demands “the Google account previously synced on this device”</summary>
+              <p>
+                That’s Factory Reset Protection — the account wasn’t removed before resetting. Sign in with
+                that Google account once to unlock, then follow step 2 in the right order: remove accounts
+                <em>first</em>, then reset.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>The 6-tap trick doesn’t open a scanner</summary>
+              <p>
+                Make sure you’re on the very first setup screen (language selection) and tap 6 times in the
+                same blank spot, about two taps per second. On very old Android versions the tablet needs
+                internet first — connect to Wi-Fi in the wizard, then try again.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>Setup finished but the tablet isn’t locked to Sayable</summary>
+              <p>
+                The settings download likely failed mid-setup. Open the Fully Kiosk app → menu → Settings →
+                <strong>Other Settings → Import Settings from URL</strong> and enter
+                <code>https://sayable.systems/kit/fully-settings.json</code> — then restart the tablet.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>I forgot my exit PIN</summary>
+              <p>
+                The kiosk PIN isn’t recoverable from the lock screen — that’s its job. If it’s truly lost,
+                factory reset (step 2 has no accounts to remove this time — the kit setup never creates any)
+                and run the kit again; your license re-attaches to the same tablet, and Sayable boards can be
+                restored from a backup file if you exported one in caregiver settings.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>The voices are missing or it speaks with a robot voice</summary>
+              <p>
+                The tablet’s Google speech engine may need voice data. Exit the kiosk (swipe from left +
+                PIN) → Settings app → General management → Text-to-speech → Google engine → install voice
+                data, then reboot. No account is needed for voice downloads.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===================== Footer ===================== -->
+    <footer class="site-footer">
+      <div class="wrap footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../" aria-label="Sayable, home">
+            <svg class="brand-mark" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+              <rect width="512" height="512" rx="112" fill="#0f172a" />
+              <path
+                d="M128 144h256a40 40 0 0 1 40 40v144a40 40 0 0 1-40 40H236l-76 64v-64h-32a40 40 0 0 1-40-40V184a40 40 0 0 1 40-40z"
+                fill="#38bdf8"
+              />
+              <circle cx="208" cy="256" r="22" fill="#0f172a" />
+              <circle cx="288" cy="256" r="22" fill="#0f172a" />
+              <circle cx="368" cy="256" r="22" fill="#0f172a" />
+            </svg>
+            <span class="brand-word">Sayable</span>
+          </a>
+          <p class="footer-tag">A voice for everyone: free, forever.</p>
+        </div>
+
+        <nav class="footer-links" aria-label="Footer">
+          <div class="footer-col">
+            <h3>Product</h3>
+            <a href="../app/">Open the app</a>
+            <a href="../">About Sayable</a>
+            <a href="./">The Kiosk Kit</a>
+          </div>
+          <div class="footer-col">
+            <h3>Project</h3>
+            <a href="https://github.com/Fishy49/sayable-systems">Source code</a>
+            <a href="https://github.com/Fishy49/sayable-systems/issues">Report an issue</a>
+          </div>
+          <div class="footer-col">
+            <h3>Credits</h3>
+            <a href="https://arasaac.org">ARASAAC symbols</a>
+            <a href="https://www.fully-kiosk.com">Fully Kiosk Browser</a>
+          </div>
+        </nav>
+      </div>
+
+      <div class="wrap footer-fine">
+        <p>
+          Fully Kiosk Browser is a product of Fully Factory GmbH (we’re happy users, not affiliated). QR
+          code drawn with the qrcode-generator library © Kazuhiko Arase, MIT license. Pictograms by ARASAAC
+          (Gobierno de Aragón, author Sergio Palao), CC BY-NC-SA.
+        </p>
+        <p>© Sayable · Open-source under GPL-3.0</p>
+      </div>
+    </footer>
+
+    <script src="./qrcode.js" defer></script>
+    <script src="./kit.js" defer></script>
+    <script src="../app.js" defer></script>
+  </body>
+</html>

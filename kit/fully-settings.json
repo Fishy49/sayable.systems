@@ -1,0 +1,15 @@
+{
+  "startURL": "https://sayable.systems/app",
+  "kioskMode": true,
+  "kioskPin": "1234",
+  "advancedKioskProtection": true,
+  "mdmLockTask": true,
+  "mdmDisableADB": false,
+  "mdmDisableSafeModeBoot": true,
+  "mdmDisableAppsFromUnknownSources": true,
+  "websiteIntegration": true,
+  "launchOnBoot": true,
+  "disableStatusBar": true,
+  "disableHomeButton": true,
+  "disableOtherApps": true
+}

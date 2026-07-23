@@ -657,6 +657,7 @@ a:hover {
 /* Voice picker: lives on the always-dark toolbar, so like the mini switch
    above it keeps the toolbar's own palette in both site themes. */
 .voice-picker {
+  position: relative; /* anchor for the drop-down panel */
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -664,7 +665,6 @@ a:hover {
   font-size: 0.85rem;
   font-weight: 600;
   color: #cbd5e1;
-  cursor: pointer;
 }
 .voice-picker[hidden] {
   display: none; /* JS hides the whole control when speech is unsupported */
@@ -673,32 +673,110 @@ a:hover {
   font-size: 1.35rem;
   line-height: 1; /* big glyph, same bar height */
 }
-.voice-picker select {
-  appearance: none;
-  -webkit-appearance: none;
+/* the trigger button, sitting in the dark demo toolbar */
+.voice-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font: inherit;
+  font-weight: 600;
   color: #e2e8f0;
   background-color: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: var(--radius-sm);
-  padding: 7px 30px 7px 12px;
+  padding: 7px 12px;
   max-width: 200px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.voice-trigger:hover {
+  background-color: rgba(255, 255, 255, 0.16);
+}
+.voice-trigger:focus-visible {
+  outline: 3px solid var(--accent-2);
+  outline-offset: 2px;
+}
+.voice-trigger-name {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.voice-trigger-caret {
+  font-size: 0.7rem;
+  opacity: 0.85;
+}
+
+/* the contained panel that drops into the demo (mimics the app's modal) */
+.voice-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  width: 264px;
+  max-width: calc(100vw - 48px);
+  max-height: 320px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+}
+.voice-panel[hidden] {
+  display: none;
+}
+.voice-opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  padding: 9px 10px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--ink);
   cursor: pointer;
-  color-scheme: dark; /* native dropdown list matches the dark toolbar */
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  transition: background-color 0.15s ease;
 }
-.voice-picker select:hover {
-  background-color: rgba(255, 255, 255, 0.16);
+.voice-opt:hover {
+  background: var(--surface);
 }
-.voice-picker select:focus-visible {
-  outline: 3px solid var(--accent-2);
-  outline-offset: 2px;
+.voice-opt.sel {
+  background: var(--accent-wash);
+  border-color: var(--accent);
+}
+.voice-opt-play {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--accent);
+  font-size: 0.68rem;
+}
+.voice-opt.sel .voice-opt-play {
+  background: var(--panel);
+}
+.voice-opt-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.voice-opt-check {
+  flex: 0 0 auto;
+  color: var(--accent);
+  font-weight: 800;
 }
 
 .utterance {
@@ -1406,9 +1484,12 @@ a:hover {
     margin-left: 0;
     width: 100%;
   }
-  .voice-picker select {
+  .voice-trigger {
     flex: 1 1 auto;
     max-width: none;
+  }
+  .voice-panel {
+    width: 100%;
   }
   .mini-switch-help {
     text-align: left;

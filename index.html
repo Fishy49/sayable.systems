@@ -180,16 +180,25 @@
           <div class="demo" id="demo-app">
             <div class="demo-toolbar">
               <span class="demo-crumb" id="demo-crumb">Home</span>
-              <label
+              <div
                 class="voice-picker"
                 id="voice-picker"
                 title="Pick the voice your device speaks with. Voices are built into your browser; nothing is downloaded."
               >
                 <span class="voice-picker-icon" aria-hidden="true">🗣️</span>
-                <select id="voice-select" aria-label="Speaking voice">
-                  <option value="">Default voice</option>
-                </select>
-              </label>
+                <button
+                  type="button"
+                  class="voice-trigger"
+                  id="voice-trigger"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  aria-label="Speaking voice"
+                >
+                  <span class="voice-trigger-name" id="voice-trigger-name">Default voice</span>
+                  <span class="voice-trigger-caret" aria-hidden="true">▾</span>
+                </button>
+                <div class="voice-panel" id="voice-panel" role="menu" aria-label="Choose a voice" hidden></div>
+              </div>
               <div class="demo-toggles">
                 <label
                   class="mini-switch"

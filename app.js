@@ -103,10 +103,19 @@
   // empty until the async `voiceschanged` event fires -- so the picker is
   // built on both paths, and rebuilt if the engine changes its mind.
   var voicePickerEl = document.getElementById("voice-picker");
-  var voiceSelect = document.getElementById("voice-select");
+  var voiceTrigger = document.getElementById("voice-trigger");
+  var voiceTriggerName = document.getElementById("voice-trigger-name");
+  var voicePanel = document.getElementById("voice-panel");
   var VOICE_KEY = "sayable-demo-voice";
   var chosenVoiceURI = read(VOICE_KEY) || "";
-  var voiceListSig = "";
+
+  // Keep the demo inviting, not overwhelming: show the browser default plus a
+  // few on-device English voices, not the whole 100+ catalog. The real app
+  // ships the full tabbed picker; this is just a taste of it.
+  var DEMO_VOICE_LIMIT = 6;
+  // Light quality nudge so the shortlist leads with recognizable voices across
+  // platforms instead of the alphabetical novelty voices (macOS "Bad News" etc).
+  var PREFERRED = /samantha|alex|daniel|karen|moira|tessa|rishi|aaron|nicky|serena|google|microsoft|zira|david|mark|natural|enhanced|premium/i;
 
   function pickedVoice() {
     if (!chosenVoiceURI || !supportsSpeech) return null;
@@ -117,62 +126,107 @@
     return null; // saved voice vanished; browser default it is
   }
 
-  function voiceOption(label, value) {
-    var o = document.createElement("option");
-    o.textContent = label;
-    o.value = value;
-    return o;
-  }
-
-  function populateVoices() {
-    if (!voiceSelect) return;
+  // A short, deduped English shortlist: browser default first, then recognizable
+  // and on-device voices, then alphabetical - capped so it stays a quick glance.
+  function demoVoices() {
     var all = window.speechSynthesis.getVoices();
-    if (!all.length) return; // not ready yet; voiceschanged calls us back
-
-    // Dedupe by voiceURI (Android Chrome repeats voices), English up front.
     var seen = {};
     var english = [];
-    var others = [];
     for (var i = 0; i < all.length; i++) {
       var v = all[i];
       if (seen[v.voiceURI]) continue;
       seen[v.voiceURI] = true;
       if (/^en/i.test(v.lang)) english.push(v);
-      else others.push(v);
     }
-    function byName(a, b) {
+    english.sort(function (a, b) {
+      if (a.default !== b.default) return a.default ? -1 : 1;
+      var pa = PREFERRED.test(a.name);
+      var pb = PREFERRED.test(b.name);
+      if (pa !== pb) return pa ? -1 : 1;
+      if (a.localService !== b.localService) return a.localService ? -1 : 1;
       return a.name.localeCompare(b.name);
-    }
-    english.sort(byName);
-    others.sort(byName);
-
-    // Engines fire voiceschanged more than once; skip no-op rebuilds.
-    var sig = english
-      .concat(others)
-      .map(function (v) {
-        return v.voiceURI;
-      })
-      .join("\n");
-    if (sig === voiceListSig) return;
-    voiceListSig = sig;
-
-    voiceSelect.textContent = "";
-    voiceSelect.appendChild(voiceOption("Default voice", ""));
-    english.forEach(function (v) {
-      voiceSelect.appendChild(voiceOption(v.name, v.voiceURI));
     });
-    if (others.length) {
-      var sep = voiceOption("──────────", "");
-      sep.disabled = true;
-      voiceSelect.appendChild(sep);
-      others.forEach(function (v) {
-        voiceSelect.appendChild(voiceOption(v.name + " (" + v.lang + ")", v.voiceURI));
-      });
-    }
+    return english.slice(0, DEMO_VOICE_LIMIT);
+  }
 
-    // Restore the saved pick; if that voice is gone, default quietly.
-    voiceSelect.value = chosenVoiceURI;
-    if (voiceSelect.selectedIndex < 0) voiceSelect.value = "";
+  function voiceRow(v) {
+    var uri = v ? v.voiceURI : "";
+    var isSel = uri === chosenVoiceURI;
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "voice-opt" + (isSel ? " sel" : "");
+    btn.setAttribute("role", "menuitemradio");
+    btn.setAttribute("aria-checked", isSel ? "true" : "false");
+
+    var play = document.createElement("span");
+    play.className = "voice-opt-play";
+    play.setAttribute("aria-hidden", "true");
+    play.textContent = v ? "▶" : "↺";
+
+    var name = document.createElement("span");
+    name.className = "voice-opt-name";
+    name.textContent = v ? v.name : "Default voice";
+
+    btn.appendChild(play);
+    btn.appendChild(name);
+
+    if (isSel) {
+      var chk = document.createElement("span");
+      chk.className = "voice-opt-check";
+      chk.setAttribute("aria-hidden", "true");
+      chk.textContent = "✓";
+      btn.appendChild(chk);
+    }
+    btn.addEventListener("click", function () {
+      selectVoice(uri);
+    });
+    return btn;
+  }
+
+  function buildPanel() {
+    if (!voicePanel) return;
+    voicePanel.textContent = "";
+    voicePanel.appendChild(voiceRow(null)); // "Default voice"
+    var list = demoVoices();
+    // Keep the saved pick visible even if it fell outside the shortlist.
+    if (chosenVoiceURI && !list.some(function (v) { return v.voiceURI === chosenVoiceURI; })) {
+      var picked = pickedVoice();
+      if (picked) list.unshift(picked);
+    }
+    list.forEach(function (v) {
+      voicePanel.appendChild(voiceRow(v));
+    });
+  }
+
+  function updateTriggerName() {
+    if (!voiceTriggerName) return;
+    var picked = pickedVoice();
+    voiceTriggerName.textContent = picked ? picked.name : "Default voice";
+  }
+
+  function openPanel() {
+    if (!voicePanel) return;
+    buildPanel();
+    voicePanel.hidden = false;
+    if (voiceTrigger) voiceTrigger.setAttribute("aria-expanded", "true");
+  }
+  function closePanel() {
+    if (!voicePanel) return;
+    voicePanel.hidden = true;
+    if (voiceTrigger) voiceTrigger.setAttribute("aria-expanded", "false");
+  }
+  function togglePanel() {
+    if (voicePanel && voicePanel.hidden) openPanel();
+    else closePanel();
+  }
+
+  function selectVoice(uri) {
+    chosenVoiceURI = uri;
+    store(VOICE_KEY, uri);
+    updateTriggerName();
+    buildPanel(); // refresh the selected highlight in place, panel stays open
+    // Only real user taps reach here, so auditioning the pick is safe and fun.
+    speak("Hi! This is how I sound.");
   }
 
   /* ------------------------------------------------------- board content */
@@ -458,26 +512,36 @@
       renderBoard();
     });
   }
-  if (voiceSelect) {
+  if (voicePickerEl) {
     if (!supportsSpeech) {
       // No engine, no voices: don't dangle a dead control.
-      if (voicePickerEl) voicePickerEl.hidden = true;
-    } else {
-      voiceSelect.addEventListener("change", function () {
-        chosenVoiceURI = voiceSelect.value;
-        store(VOICE_KEY, chosenVoiceURI);
-        // Only real user changes land here (restoring .value at load never
-        // fires `change`), so auditioning the pick is safe and fun.
-        speak("Hi! This is how I sound.");
+      voicePickerEl.hidden = true;
+    } else if (voiceTrigger && voicePanel) {
+      voiceTrigger.addEventListener("click", function (e) {
+        e.stopPropagation();
+        togglePanel();
+      });
+      // Taps inside the panel shouldn't bubble out to the close-on-outside.
+      voicePanel.addEventListener("click", function (e) {
+        e.stopPropagation();
+      });
+      document.addEventListener("click", function () {
+        if (voicePanel && !voicePanel.hidden) closePanel();
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && voicePanel && !voicePanel.hidden) closePanel();
       });
     }
   }
 
-  // Some browsers populate voices asynchronously; build the picker now if
-  // the list is ready, and again whenever the engine coughs it up.
+  // Voices load asynchronously in some browsers; set the trigger label now if
+  // they're ready, and refresh whenever the engine coughs them up.
   if (supportsSpeech && typeof window.speechSynthesis.getVoices === "function") {
-    populateVoices();
-    window.speechSynthesis.onvoiceschanged = populateVoices;
+    updateTriggerName();
+    window.speechSynthesis.onvoiceschanged = function () {
+      updateTriggerName();
+      if (voicePanel && !voicePanel.hidden) buildPanel();
+    };
   }
 
   renderBoard();

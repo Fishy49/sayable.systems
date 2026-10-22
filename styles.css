@@ -1348,7 +1348,7 @@ a:hover {
 }
 .footer-inner {
   display: grid;
-  grid-template-columns: 1.2fr 2fr;
+  grid-template-columns: 1.2fr 2.8fr;
   gap: 40px;
   padding-bottom: 40px;
 }
@@ -1358,8 +1358,12 @@ a:hover {
   max-width: 26em;
 }
 .footer-links {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* Flex, not grid: the columns are content-width (four equal ones would be
+     narrower than "contact@sayable.systems" and wrap the shorter links), and
+     wrapping is what keeps them from overflowing the track on a laptop, where
+     the footer is still two columns but no longer wide. */
+  display: flex;
+  flex-wrap: wrap;
   gap: 24px;
 }
 .footer-col {
@@ -1380,6 +1384,13 @@ a:hover {
 }
 .footer-col a:hover {
   color: var(--accent-ink);
+}
+/* A line of plain prose under a footer link, not another link. */
+.footer-note {
+  color: var(--ink-3);
+  font-size: 0.85rem;
+  line-height: 1.45;
+  max-width: 24ch;
 }
 .footer-fine {
   border-top: 1px solid var(--line);
@@ -1440,9 +1451,6 @@ a:hover {
   .btn-github span {
     display: none;
   }
-  .footer-links {
-    grid-template-columns: 1fr 1fr;
-  }
   /* Keep the decorative hero board fully on-screen and the title from clipping */
   .hero-title {
     font-size: clamp(2.1rem, 1.2rem + 4.6vw, 3rem);
@@ -1458,12 +1466,6 @@ a:hover {
     margin-inline: auto;
     transform: none;
     animation: none;
-  }
-}
-
-@media (max-width: 420px) {
-  .footer-links {
-    grid-template-columns: 1fr;
   }
 }
 
